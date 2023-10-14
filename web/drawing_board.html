@@ -1,0 +1,43 @@
+<html>
+    <meta charset="utf8">
+    <head>
+        <title>Draw Pad</title>
+        <link rel="stylesheet" href="css/global-styles.css"/>
+    </head>
+    <script src="js/drawing_board.js"></script>
+    <body>
+        <div id="control">
+            <button onclick="clearDrawing()">Clear</button>
+            <button onclick="undo()">Undo</button>
+            <span style="padding-left: 10px;">
+                <input type="file" accept=".json,application/json" id="savedFile" name="savedFile"/>
+            </span>
+            <span style="padding-left: 10px;">
+                <button onclick="save()">Save</button>
+            </span>
+        </div>
+        <hr/>
+        <div id="DrawArea"></div>
+    </body>
+    <script>
+        const drawPad = new DrawPad(document.getElementById("DrawArea"));
+        document.getElementById("savedFile").onchange = function() {
+            console.log(this.files);
+            drawPad.openFile(this.files[0]);
+        }
+    </script>
+    <script>
+        function clearDrawing() {
+            drawPad.reset();
+        }
+
+        function undo() {
+            drawPad.undo();
+        }
+
+        function save() {
+            drawPad.save();
+        }
+
+    </script>
+</html>
