@@ -1,4 +1,5 @@
 
+
 class DrawPad {
     constructor(container, sizeX=1200, sizeY=600) {
         this.canvas = document.createElement("canvas");
@@ -16,18 +17,36 @@ class DrawPad {
     }
 
     reset() {
+        /*
+        paths = [
+            {
+                "color": 112233,
+                "points": [
+                    [x1,y1],
+                    [x2,y2],
+                    [x3,y3]
+                ]
+            }
+        ]
+        */
         this.paths = [];
         this.ratio = 1;
         this.isDrawing = false;
         this.shiftDown = false;
         this.originalMouseXY = null;
+        this.RGB_color = ["00", "00", "00"]
         this.redraw();
     }
 
     #setupDrawEvent() {
         this.canvas.onmousedown=(env) => {
             var mouseXY = this.#getMouseXY(env);
-            this.paths.push([mouseXY]);
+            this.paths.push(
+                {
+                    "color": "#" + this.RGB_color.join(""),
+                    "points": [mouseXY]
+                }
+            );
             this.isDrawing = true;
         }
 
@@ -81,7 +100,7 @@ class DrawPad {
         }
         var mouseXY = this.#getMouseXY(env);
         var i = this.paths.length - 1;
-        this.paths[i].push(mouseXY);
+        this.paths[i]["points"].push(mouseXY);
         this.redraw();
     }
 
@@ -118,29 +137,30 @@ class DrawPad {
     }
 
     #drawPath(path, color, xOffset=0, yOffset=0){
-        if (path.length < 1) {
+        var points = path["points"]
+        if (points.length < 1) {
             return;
         }
 
-        this.ctx.strokeStyle=color;
-        this.ctx.lineWidth=3;
+        this.ctx.strokeStyle = path["color"];
+        this.ctx.lineWidth=1;
         this.ctx.beginPath();
 
-        path[0][0] += xOffset;
-        path[0][1] += yOffset;
+        points[0][0] += xOffset;
+        points[0][1] += yOffset;
 
-        let y = path[0][1] * this.ratio;
-        let x = path[0][0] * this.ratio;
+        let y = points[0][1] * this.ratio;
+        let x = points[0][0] * this.ratio;
         this.ctx.moveTo(x, y);
         
         logConsole("start at: (" + x + "," + y + ")")
 
-        for(let i = 1; i < path.length; i++) {
-            path[i][0] += xOffset;
-            path[i][1] += yOffset;
+        for(let i = 1; i < points.length; i++) {
+            points[i][0] += xOffset;
+            points[i][1] += yOffset;
 
-            y = path[i][1] * this.ratio;
-            x = path[i][0] * this.ratio;
+            y = points[i][1] * this.ratio;
+            x = points[i][0] * this.ratio;
             logConsole("line to: (" + x + "," + y + ")")
             this.ctx.lineTo(x, y);
         }
@@ -203,6 +223,10 @@ class DrawPad {
 
     openFile(file) {
         this.#loadFile(URL.createObjectURL(file));
+    }
+
+    updateRGB(color, index) {
+        this.RGB_color[index] = color;
     }
 
 }

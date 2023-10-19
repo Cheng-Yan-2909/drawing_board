@@ -9,6 +9,12 @@
         <div id="control">
             <button onclick="clearDrawing()">Clear</button>
             <button onclick="undo()">Undo</button>
+            <span>
+                <span>Color: </span>
+                <span>R: <input type="text" id="color_R" name="color_R" onkeyup="updateRGB(this, 0);" value="00" size="2"></span>
+                <span>G: <input type="text" id="color_G" name="color_G" onkeyup="updateRGB(this, 1);" value="00" size="2"></span>
+                <span>B: <input type="text" id="color_B" name="color_B" onkeyup="updateRGB(this, 2);" value="00" size="2"></span>
+            </span>
             <span style="padding-left: 10px;">
                 <input type="file" accept=".json,application/json" id="savedFile" name="savedFile"/>
             </span>
@@ -41,6 +47,20 @@
 
         function redraw(xOffset=0, yOffset=0) {
             drawPad.redraw(xOffset, yOffset);
+        }
+
+        function updateRGB(color_box, index) {
+            color = color_box.value;
+            color = color.toUpperCase();
+            color = color.replace(/[^A-F0-9]/, "")
+            if(color.length > 2) {
+                color = color.substring(0, 2);
+            }
+            color_box.value = color;
+            while(color.length < 2) {
+                color += "0";
+            }
+            drawPad.updateRGB(color, index);
         }
 
     </script>
