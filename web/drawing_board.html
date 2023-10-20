@@ -20,7 +20,7 @@
                 <span><input type="text" id="line_size" name="line_size" onkeyup="updateLineSize(this)" size="2"></span>
             </span>
             <span style="padding-left: 10px;">
-                <input type="file" accept=".json,application/json" id="savedFile" name="savedFile"/>
+                <button onclick="createFileOpener(this)">Open File</button>
             </span>
             <span style="padding-left: 10px;">
                 <button onclick="save()">Save</button>
@@ -31,12 +31,21 @@
     </body>
     <script>
         const drawPad = new DrawPad(document.getElementById("DrawArea"));
-        document.getElementById("savedFile").onchange = function() {
-            console.log(this.files);
-            drawPad.openFile(this.files[0]);
-        }
     </script>
     <script>
+        function createFileOpener(bt) {
+            input = document.createElement("input")
+            input.type="file";
+            input.accept = ".json,application/json";
+            input.onchange = function() {
+                console.log(this.files);
+                drawPad.openFile(this.files[0]);
+            }
+            bt.parentNode.appendChild(input);
+            input.click();
+            bt.parentNode.removeChild(input);
+        }
+
         function clearDrawing() {
             drawPad.reset();
         }
