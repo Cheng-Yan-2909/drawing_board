@@ -17,7 +17,24 @@
             </span>
             <span>
                 <span>Line Size:</span>
-                <span><input type="text" id="line_size" name="line_size" onkeyup="updateLineSize(this)" size="2"></span>
+                <select id="line_size" name="line_size" onchange="updateLineSize(this)">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </span>
+            <span>
+                <span>Line Type:</span>
+                <select id="line_type" name="line_type" onchange="updateLineType(this);">
+                    <option name="free" value="free">Free</option>
+                    <option name="line" value="line">Line</option>
+                </select>
             </span>
             <span style="padding-left: 10px;">
                 <button onclick="createFileOpener(this)">Open File</button>
@@ -77,13 +94,11 @@
         }
 
         function updateLineSize(lineSizeBox) {
-            lineSize = lineSizeBox.value;
-            lineSize = lineSize.replace(/\D/, "");
-            if (lineSize > 20) {
-                lineSize = 20;
-            }
-            lineSizeBox.value = lineSize;
-            drawPad.updateLineSize(lineSize);
+            drawPad.updateLineSize(lineSizeBox.options[lineSizeBox.selectedIndex].value);
+        }
+
+        function updateLineType(lineTypeSelect) {
+            drawPad.updateLineStyle(lineTypeSelect.options[lineTypeSelect.selectedIndex].value);
         }
 
     </script>

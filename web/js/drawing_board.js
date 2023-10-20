@@ -1,5 +1,11 @@
 
 
+const LineStyle = {
+    FREE: "free",
+    LINE: "line"
+}
+
+
 class DrawPad {
     constructor(container, sizeX=1200, sizeY=600) {
         this.canvas = document.createElement("canvas");
@@ -36,6 +42,7 @@ class DrawPad {
         this.originalMouseXY = null;
         this.RGB_color = ["00", "00", "00"];
         this.lineSize = 1;
+        this.lineStyle = LineStyle.FREE;
         this.redraw();
     }
 
@@ -102,7 +109,16 @@ class DrawPad {
         }
         var mouseXY = this.#getMouseXY(env);
         var i = this.paths.length - 1;
-        this.paths[i]["points"].push(mouseXY);
+        
+        if (this.lineStyle == LineStyle.LINE) {
+            if(  this.paths[i]["points"].length < 2 ) {
+                this.paths[i]["points"].push(mouseXY);
+            }
+            this.paths[i]["points"][1] = mouseXY;
+        }
+        else {
+            this.paths[i]["points"].push(mouseXY);
+        }
         this.redraw();
     }
 
@@ -233,6 +249,10 @@ class DrawPad {
 
     updateLineSize(lineSize) {
         this.lineSize = lineSize;
+    }
+
+    updateLineStyle(lineStyle) {
+        this.lineStyle = lineStyle;
     }
 
 }
