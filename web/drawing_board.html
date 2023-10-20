@@ -15,6 +15,10 @@
                 <span>G: <input type="text" id="color_G" name="color_G" onkeyup="updateRGB(this, 1);" value="00" size="2"></span>
                 <span>B: <input type="text" id="color_B" name="color_B" onkeyup="updateRGB(this, 2);" value="00" size="2"></span>
             </span>
+            <span>
+                <span>Line Size:</span>
+                <span><input type="text" id="line_size" name="line_size" onkeyup="updateLineSize(this)" size="2"></span>
+            </span>
             <span style="padding-left: 10px;">
                 <input type="file" accept=".json,application/json" id="savedFile" name="savedFile"/>
             </span>
@@ -61,6 +65,16 @@
                 color += "0";
             }
             drawPad.updateRGB(color, index);
+        }
+
+        function updateLineSize(lineSizeBox) {
+            lineSize = lineSizeBox.value;
+            lineSize = lineSize.replace(/\D/, "");
+            if (lineSize > 20) {
+                lineSize = 20;
+            }
+            lineSizeBox.value = lineSize;
+            drawPad.updateLineSize(lineSize);
         }
 
     </script>

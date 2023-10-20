@@ -34,7 +34,8 @@ class DrawPad {
         this.isDrawing = false;
         this.shiftDown = false;
         this.originalMouseXY = null;
-        this.RGB_color = ["00", "00", "00"]
+        this.RGB_color = ["00", "00", "00"];
+        this.lineSize = 1;
         this.redraw();
     }
 
@@ -44,6 +45,7 @@ class DrawPad {
             this.paths.push(
                 {
                     "color": "#" + this.RGB_color.join(""),
+                    "lineSize" : this.lineSize,
                     "points": [mouseXY]
                 }
             );
@@ -143,7 +145,7 @@ class DrawPad {
         }
 
         this.ctx.strokeStyle = path["color"];
-        this.ctx.lineWidth=1;
+        this.ctx.lineWidth = path["lineSize"];
         this.ctx.beginPath();
 
         points[0][0] += xOffset;
@@ -227,6 +229,10 @@ class DrawPad {
 
     updateRGB(color, index) {
         this.RGB_color[index] = color;
+    }
+
+    updateLineSize(lineSize) {
+        this.lineSize = lineSize;
     }
 
 }
