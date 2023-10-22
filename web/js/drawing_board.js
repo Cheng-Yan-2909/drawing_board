@@ -149,12 +149,12 @@ class DrawPad {
         //this.originalMouseXY = this.#getMouseXY(env);
     }
 
-    redraw(xOffset=0, yOffset=0){
+    redraw(xOffset=0, yOffset=0, resize=1){
         this.ctx.clearRect(0,0, this.canvas.width,this.canvas.height);
-        this.drawPaths(xOffset, yOffset);
+        this.drawPaths(xOffset, yOffset, resize);
     }
 
-    #drawPath(path, color, xOffset=0, yOffset=0){
+    #drawPath(path, color, xOffset=0, yOffset=0, resize=1){
         var points = path["points"]
         if (points.length < 1) {
             return;
@@ -164,6 +164,8 @@ class DrawPad {
         this.ctx.lineWidth = path["lineSize"];
         this.ctx.beginPath();
 
+        points[0][0] *= resize;
+        points[0][1] *= resize;
         points[0][0] += xOffset;
         points[0][1] += yOffset;
 
@@ -174,6 +176,8 @@ class DrawPad {
         logConsole("start at: (" + x + "," + y + ")")
 
         for(let i = 1; i < points.length; i++) {
+            points[i][0] *= resize;
+            points[i][1] *= resize;
             points[i][0] += xOffset;
             points[i][1] += yOffset;
 
@@ -196,11 +200,11 @@ class DrawPad {
         ];
     }
      
-    drawPaths(xOffset=0, yOffset=0){
+    drawPaths(xOffset=0, yOffset=0, resize=1){
         let color="black";
 
         for( var path of this.paths ) {
-            this.#drawPath(path, color, xOffset, yOffset);
+            this.#drawPath(path, color, xOffset, yOffset, resize);
         }
         
     }
@@ -253,6 +257,11 @@ class DrawPad {
 
     updateLineStyle(lineStyle) {
         this.lineStyle = lineStyle;
+    }
+
+    reSizeImage(size) {
+        console.log("resize: " + size);
+        this.redraw(0, 0, size);
     }
 
 }

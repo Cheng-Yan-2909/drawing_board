@@ -36,6 +36,9 @@
                     <option name="line" value="line">Line</option>
                 </select>
             </span>
+            <span>
+                <button onclick="resizeImage()">Resize</button>
+            </span>
             <span style="padding-left: 10px;">
                 <button onclick="createFileOpener(this)">Open File</button>
             </span>
@@ -99,6 +102,19 @@
 
         function updateLineType(lineTypeSelect) {
             drawPad.updateLineStyle(lineTypeSelect.options[lineTypeSelect.selectedIndex].value);
+        }
+
+        function resizeImage() {
+            val = prompt("Enter ratio:");
+            if (val === null) {
+                return;
+            }
+            val = val.replace(/[^\d\.]/, "");
+            val = parseFloat(val);
+
+            if( val ) {
+                drawPad.reSizeImage(val);
+            }
         }
 
     </script>
