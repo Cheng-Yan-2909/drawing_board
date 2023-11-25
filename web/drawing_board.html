@@ -43,7 +43,12 @@
                 <button onclick="createFileOpener(this)">Open File</button>
             </span>
             <span style="padding-left: 10px;">
-                <button onclick="save()">Save</button>
+                <button onclick="showSaveOptions(this)">Save</button>
+                <select onchange="save(this)" id="saveOptions" style="display:none;">
+                    <option name="none" value="none">--</option>
+                    <option name="json" value="text/plain">JSON</option>
+                    <option name="png" value="image/png">PNG</option>
+                </select>
             </span>
         </div>
         <div id="horizontal_space" style="padding-top:5px;padding-bottom: 5px;"> </div>
@@ -74,8 +79,25 @@
             drawPad.undo();
         }
 
-        function save() {
-            drawPad.save();
+        function save(obj) {
+            obj.style.display = "none";
+            var i = obj.selectedIndex;
+            drawPad.save(obj.options[i].value);
+        }
+
+        function showSaveOptions(bt) {
+            var x = bt.offsetLeft;
+            var y = bt.offsetTop;
+            var saveOption = document.getElementById("saveOptions");
+            saveOption.style.position = "absolute";
+            saveOption.style.left = x;
+            saveOption.style.top = y + parseInt(bt.offsetHeight);
+            saveOption.style.display = "block";
+            saveOption.focus();
+            saveOption.onblur = function() {
+                saveOption.style.display = "none";
+            }
+            
         }
 
         function redraw(xOffset=0, yOffset=0) {
