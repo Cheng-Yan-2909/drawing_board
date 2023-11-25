@@ -4,17 +4,21 @@
         <title>Draw Pad</title>
         <link rel="stylesheet" href="css/global-styles.css"/>
     </head>
+    <script src="js/lib.js"></script>
     <script src="js/drawing_board.js"></script>
     <body>
         <div id="control">
             <button onclick="clearDrawing()">Clear</button>
             <button onclick="undo()">Undo</button>
             <span>
-                <span>Color: </span>
-                <span>R: <input type="text" id="color_R" name="color_R" onkeyup="updateRGB(this, 0);" value="00" size="2"></span>
-                <span>G: <input type="text" id="color_G" name="color_G" onkeyup="updateRGB(this, 1);" value="00" size="2"></span>
-                <span>B: <input type="text" id="color_B" name="color_B" onkeyup="updateRGB(this, 2);" value="00" size="2"></span>
+                <button onclick="showColorOptions(this)">Color</button>
+                <div id="colorOptions" style="display:none;">
+                    <span>R: <input type="text" id="color_R" name="color_R" onkeyup="updateRGB(this, 0);" value="00" size="2"></span>
+                    <span>G: <input type="text" id="color_G" name="color_G" onkeyup="updateRGB(this, 1);" value="00" size="2"></span>
+                    <span>B: <input type="text" id="color_B" name="color_B" onkeyup="updateRGB(this, 2);" value="00" size="2"></span>
+                </div>
             </span>
+            |
             <span>
                 <span>Line Size:</span>
                 <select id="line_size" name="line_size" onchange="updateLineSize(this)">
@@ -29,6 +33,7 @@
                     <option value="9">9</option>
                 </select>
             </span>
+            |
             <span>
                 <span>Line Type:</span>
                 <select id="line_type" name="line_type" onchange="updateLineType(this);">
@@ -86,18 +91,11 @@
         }
 
         function showSaveOptions(bt) {
-            var x = bt.offsetLeft;
-            var y = bt.offsetTop;
-            var saveOption = document.getElementById("saveOptions");
-            saveOption.style.position = "absolute";
-            saveOption.style.left = x;
-            saveOption.style.top = y + parseInt(bt.offsetHeight);
-            saveOption.style.display = "block";
-            saveOption.focus();
-            saveOption.onblur = function() {
-                saveOption.style.display = "none";
-            }
-            
+            new SubMenu(bt, "saveOptions").show();
+        }
+
+        function showColorOptions(bt) {
+            new SubMenu(bt, "colorOptions").show();
         }
 
         function redraw(xOffset=0, yOffset=0) {
