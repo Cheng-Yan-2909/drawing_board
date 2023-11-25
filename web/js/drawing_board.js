@@ -217,12 +217,29 @@ class DrawPad {
         this.redraw();
     }
 
-    save() {
+    save(imgType="text/plain") {
         var a = document.createElement('a');
-        a.setAttribute('href', 
-            'data:text/plain;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.paths))
-        );
-        a.setAttribute('download', "drawing.json");
+
+        if( imgType == "image/png" ) {
+            var self = this;
+            this.canvas.toBlob(
+                function(data) {
+                    var url = URL.createObjectURL(data);
+                    self.startDownload(a, "drawing.png", url)
+                },
+                imgType,
+                1
+            );
+        }
+        else {
+            var url = 'data:text/plain;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.paths))
+            this.startDownload(a, "drawing.json", url);
+        }
+    }
+
+    startDownload(a, name, url) {
+        a.setAttribute('href', url);
+        a.setAttribute('download', name);
         a.style.display = "none";
         document.body.appendChild(a);
         a.click();
