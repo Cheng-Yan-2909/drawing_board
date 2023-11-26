@@ -220,20 +220,25 @@ class DrawPad {
     save(imgType="text/plain") {
         var a = document.createElement('a');
 
-        if( imgType == "image/png" ) {
+        if( imgType == "text/plain" ) {
+            var url = 'data:text/plain;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.paths))
+            this.startDownload(a, "drawing.json", url);
+        }
+        else {
             var self = this;
+            var imageName = "drawing.png";
+            if(imgType == "image/jpeg") {
+                imageName = "drawing.jpeg";
+            }
+
             this.canvas.toBlob(
                 function(data) {
                     var url = URL.createObjectURL(data);
-                    self.startDownload(a, "drawing.png", url)
+                    self.startDownload(a, imageName, url)
                 },
                 imgType,
                 1
             );
-        }
-        else {
-            var url = 'data:text/plain;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.paths))
-            this.startDownload(a, "drawing.json", url);
         }
     }
 
