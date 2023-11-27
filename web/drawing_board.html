@@ -11,7 +11,9 @@
             <button onclick="clearDrawing()">Clear</button>
             <button onclick="undo()">Undo</button>
             <span>
-                <button onclick="showColorOptions(this)">Color</button>
+                <button id="colorOptionsButton" onclick="showColorOptions(this)">Color: 
+                    <span id="colorSampleButton" style="background-color:#ffffff;"> &nbsp;&nbsp;&nbsp;&nbsp; </span>
+                </button>
                 <div id="colorOptions" style="display:none;">
                     <span>R: <input type="text" id="color_R" name="color_R" onkeyup="updateRGB(this, 0);" value="00" size="2"></span>
                     <span>G: <input type="text" id="color_G" name="color_G" onkeyup="updateRGB(this, 1);" value="00" size="2"></span>
@@ -19,7 +21,9 @@
                 </div>
             </span>
             <span>
-                <button onclick="showLineSizeOptions(this)">Line Size:</button>
+                <button onclick="showLineSizeOptions(this)">Line Size:
+                    <span id="lineSizeSample">1</span>
+                </button>
                 <select id="lineSizeOptions" name="lineSizeOptions" onchange="updateLineSize(this)" style="display:none;">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -33,7 +37,9 @@
                 </select>
             </span>
             <span>
-                <button onclick="showLineTypeOptions(this)">Line Type:</button>
+                <button onclick="showLineTypeOptions(this)">Line Type:
+                    <span id="lineTypeSample">free</span>
+                </button>
                 <select id="lineTypeOptions" name="lineTypeOptions" onchange="updateLineType(this);">
                     <option name="free" value="free">Free</option>
                     <option name="line" value="line">Line</option>
@@ -124,15 +130,15 @@
             while(color.length < 2) {
                 color += "0";
             }
-            drawPad.updateRGB(color, index);
+            drawPad.updateRGB(color, index, "colorSampleButton");
         }
 
         function updateLineSize(lineSizeBox) {
-            drawPad.updateLineSize(lineSizeBox.options[lineSizeBox.selectedIndex].value);
+            drawPad.updateLineSize(lineSizeBox.options[lineSizeBox.selectedIndex].value, "lineSizeSample");
         }
 
         function updateLineType(lineTypeSelect) {
-            drawPad.updateLineStyle(lineTypeSelect.options[lineTypeSelect.selectedIndex].value);
+            drawPad.updateLineStyle(lineTypeSelect.options[lineTypeSelect.selectedIndex].value, "lineTypeSample");
         }
 
         function resizeImage() {

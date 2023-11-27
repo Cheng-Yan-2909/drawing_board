@@ -277,16 +277,19 @@ class DrawPad {
         this.#loadFile(URL.createObjectURL(file));
     }
 
-    updateRGB(color, index) {
+    updateRGB(color, index, colorSampleButtonName) {
         this.RGB_color[index] = color;
+        document.getElementById(colorSampleButtonName).style.backgroundColor = "#" + this.RGB_color.join("");
     }
 
-    updateLineSize(lineSize) {
+    updateLineSize(lineSize, lineSizeSampleName) {
         this.lineSize = lineSize;
+        document.getElementById(lineSizeSampleName).innerHTML = lineSize;
     }
 
-    updateLineStyle(lineStyle) {
+    updateLineStyle(lineStyle, lineTypeSampleName) {
         this.lineStyle = lineStyle;
+        document.getElementById(lineTypeSampleName).innerHTML = lineStyle;
     }
 
     reSizeImage(size) {
