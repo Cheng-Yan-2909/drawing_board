@@ -18,10 +18,9 @@
                     <span>B: <input type="text" id="color_B" name="color_B" onkeyup="updateRGB(this, 2);" value="00" size="2"></span>
                 </div>
             </span>
-            |
             <span>
-                <span>Line Size:</span>
-                <select id="line_size" name="line_size" onchange="updateLineSize(this)">
+                <button onclick="showLineSizeOptions(this)">Line Size:</button>
+                <select id="lineSizeOptions" name="lineSizeOptions" onchange="updateLineSize(this)" style="display:none;">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -33,10 +32,9 @@
                     <option value="9">9</option>
                 </select>
             </span>
-            |
             <span>
-                <span>Line Type:</span>
-                <select id="line_type" name="line_type" onchange="updateLineType(this);">
+                <button onclick="showLineTypeOptions(this)">Line Type:</button>
+                <select id="lineTypeOptions" name="lineTypeOptions" onchange="updateLineType(this);">
                     <option name="free" value="free">Free</option>
                     <option name="line" value="line">Line</option>
                 </select>
@@ -78,7 +76,7 @@
         }
 
         function clearDrawing() {
-            drawPad.reset();
+            drawPad.clearDrawing();
         }
 
         function undo() {
@@ -86,9 +84,13 @@
         }
 
         function save(obj) {
+            if( obj.selectedIndex < 1) {
+                return;
+            }
             obj.style.display = "none";
             var i = obj.selectedIndex;
             drawPad.save(obj.options[i].value);
+            obj.selectedIndex = 0;
         }
 
         function showSaveOptions(bt) {
@@ -97,6 +99,14 @@
 
         function showColorOptions(bt) {
             new SubMenu(bt, "colorOptions").show();
+        }
+        
+        function showLineSizeOptions(bt) {
+            new SubMenu(bt, "lineSizeOptions").show();
+        }
+
+        function showLineTypeOptions(bt) {
+            new SubMenu(bt, "lineTypeOptions").show();
         }
 
         function redraw(xOffset=0, yOffset=0) {

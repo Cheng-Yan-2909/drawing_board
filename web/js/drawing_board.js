@@ -46,6 +46,11 @@ class DrawPad {
         this.redraw();
     }
 
+    clearDrawing() {
+        this.paths = [];
+        this.redraw();
+    }
+
     #setupDrawEvent() {
         this.canvas.onmousedown=(env) => {
             var mouseXY = this.#getMouseXY(env);
@@ -53,6 +58,7 @@ class DrawPad {
                 {
                     "color": "#" + this.RGB_color.join(""),
                     "lineSize" : this.lineSize,
+                    "lineStyle" : this.lineStyle,
                     "points": [mouseXY]
                 }
             );
@@ -151,10 +157,12 @@ class DrawPad {
 
     redraw(xOffset=0, yOffset=0, resize=1){
         this.ctx.clearRect(0,0, this.canvas.width,this.canvas.height);
+        this.ctx.fillStyle = "#ffffff";
+        this.ctx.fillRect(0,0, this.canvas.width,this.canvas.height);
         this.drawPaths(xOffset, yOffset, resize);
     }
 
-    #drawPath(path, color, xOffset=0, yOffset=0, resize=1){
+    #drawPath(path, xOffset=0, yOffset=0, resize=1){
         var points = path["points"]
         if (points.length < 1) {
             return;
@@ -204,7 +212,7 @@ class DrawPad {
         let color="black";
 
         for( var path of this.paths ) {
-            this.#drawPath(path, color, xOffset, yOffset, resize);
+            this.#drawPath(path, xOffset, yOffset, resize);
         }
         
     }
@@ -221,7 +229,7 @@ class DrawPad {
         var a = document.createElement('a');
 
         if( imgType == "text/plain" ) {
-            var url = 'data:text/plain;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.paths))
+            var url = 'data:text/plain;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.paths, null, 4))
             this.startDownload(a, "drawing.json", url);
         }
         else {
