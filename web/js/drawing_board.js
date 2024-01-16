@@ -55,6 +55,7 @@ class DrawPad {
 
     clearDrawing() {
         this.paths = [];
+        this.move_drawing_index = -1  // -1 disable, 0...n-1 index, n = all
         this.redraw();
     }
 
@@ -88,9 +89,16 @@ class DrawPad {
             this.isDrawing = false;
         }
 
+        /*
+            https://www.toptal.com/developers/keycode
+        */
         document.onkeydown=(env) => {
+            console.log("key: " + env.key)
             if( env.shiftKey ) {
                 this.shiftDown = true;
+            }
+            else if((env.key >= 0 && env.key <= 9)) {
+                this.move_drawing_index = parseInt(env.key)
             }
         }
 
@@ -225,8 +233,16 @@ class DrawPad {
     drawPaths(xOffset=0, yOffset=0, resize=1){
         let color="black";
 
+        var i = 0
         for( var path of this.paths ) {
-            this.#drawPath(path, xOffset, yOffset, resize);
+            var _xOffset = 0;
+            var _yOffset = 0;
+            if(this.move_drawing_index == i || this.move_drawing_index >= this.paths.length) {
+                _xOffset = xOffset;
+                _yOffset = yOffset;
+            }
+            this.#drawPath(path, _xOffset, _yOffset, resize);
+            i += 1;
         }
         
     }
