@@ -60,6 +60,16 @@
                     <option name="jpeg" value="image/jpeg">JPEG</option>
                 </select>
             </span>
+            <span>
+                <button onclick="showCameraOptions(this)">Camera</button>
+                <div id="cameraOptions" style="display:none;">
+                    <span>X: <input type="text" id="camera_x" value="" size="2" onclick="this.focus()"></span> |
+                    <span>Y: <input type="text" id="camera_y" value="" size="2" onclick="this.focus()"></span> |
+                    <span>Z: <input type="text" id="camera_z" value="" size="2" onclick="this.focus()"></span> |
+                    <span>F: <input type="text" id="camera_f" value="" size="2" onclick="this.focus()"></span> |
+                    <button onclick="updateCameraOptions()">Update</button>
+                </div>
+            </span>
         </div>
         <div id="horizontal_space" style="padding-top:5px;padding-bottom: 5px;"> </div>
         <div id="DrawArea" style="margin-left: 20px; margin-top: 20px;"></div>
@@ -115,6 +125,10 @@
             new SubMenu(bt, "lineTypeOptions").show();
         }
 
+        function showCameraOptions(bt) {
+            new SubMenu(bt, "cameraOptions").show();
+        }
+
         function redraw(xOffset=0, yOffset=0) {
             drawPad.redraw(xOffset, yOffset);
         }
@@ -139,6 +153,32 @@
 
         function updateLineType(lineTypeSelect) {
             drawPad.updateLineStyle(lineTypeSelect.options[lineTypeSelect.selectedIndex].value, "lineTypeSample");
+        }
+
+        function updateCameraOptions() {
+            var camera_x = parseInt( document.getElementById("camera_x").value );
+            var camera_y = parseInt( document.getElementById("camera_y").value );
+            var camera_z = parseInt( document.getElementById("camera_z").value );
+            var camera_f = parseInt( document.getElementById("camera_f").value );
+
+            if( isNaN(camera_x)) {
+                camera_x = 0;
+                document.getElementById("camera_x").value = camera_x;
+            }
+            if( isNaN(camera_y)) {
+                camera_y = 0;
+                document.getElementById("camera_y").value = camera_y;
+            }
+            if( isNaN(camera_z)) {
+                camera_z = 0;
+                document.getElementById("camera_z").value = camera_z;
+            }
+            if( isNaN(camera_f)) {
+                camera_f = 0;
+                document.getElementById("camera_f").value = camera_f;
+            }
+            
+            drawPad.updateCameraOptions(camera_x, camera_y, camera_z, camera_f);
         }
 
         function resizeImage() {

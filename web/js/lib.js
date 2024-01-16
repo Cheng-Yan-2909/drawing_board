@@ -1,5 +1,13 @@
 
 
+var enableLogging = false;
+function logConsole(msg, forced=false) {
+    if (!enableLogging && !forced) {
+        return;
+    }
+    console.log(msg);
+}
+
 
 class SubMenu {
 

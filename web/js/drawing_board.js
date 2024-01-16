@@ -43,6 +43,13 @@ class DrawPad {
         this.RGB_color = ["00", "00", "00"];
         this.lineSize = 1;
         this.lineStyle = LineStyle.FREE;
+        this.camera = {
+            x: 0, 
+            y: 0, 
+            z: 0,
+            f: 1,
+            angle: 0
+        }
         this.redraw();
     }
 
@@ -177,11 +184,12 @@ class DrawPad {
         points[0][0] += xOffset;
         points[0][1] += yOffset;
 
-        let y = points[0][1] * this.ratio;
-        let x = points[0][0] * this.ratio;
+        var p = this.transform(points[0][0] * this.ratio, points[0][1] * this.ratio);
+        let x = p[0];
+        let y = p[1];
         this.ctx.moveTo(x, y);
         
-        logConsole("start at: (" + x + "," + y + ")")
+        logConsole("start at: (" + x + "," + y + ")");
 
         for(let i = 1; i < points.length; i++) {
             points[i][0] *= resize;
@@ -189,14 +197,20 @@ class DrawPad {
             points[i][0] += xOffset;
             points[i][1] += yOffset;
 
-            y = points[i][1] * this.ratio;
-            x = points[i][0] * this.ratio;
-            logConsole("line to: (" + x + "," + y + ")")
+            p = this.transform(points[i][0] * this.ratio, points[i][1] * this.ratio);
+            x = p[0];
+            y = p[1];
+            logConsole("line to: (" + x + "," + y + ")");
             this.ctx.lineTo(x, y);
         }
         this.ctx.lineCap="round";
         this.ctx.lineJoin="round";
         this.ctx.stroke();
+    }
+
+    transform(x, y, z=0) {
+        
+        return [x, y];
     }
 
     #getZoomOffset() {
@@ -292,6 +306,14 @@ class DrawPad {
         document.getElementById(lineTypeSampleName).innerHTML = lineStyle;
     }
 
+    updateCameraOptions(camera_x, camera_y, camera_z, camera_f) {
+        this.camera.x = camera_x;
+        this.camera.y = camera_y;
+        this.camera.z = camera_z;
+        this.camera.f = camera_f;
+        this.redraw();
+    }
+
     reSizeImage(size) {
         console.log("resize: " + size);
         this.redraw(0, 0, size);
@@ -299,11 +321,5 @@ class DrawPad {
 
 }
 
-enableLogging = false;
-function logConsole(msg) {
-    if (!enableLogging) {
-        return;
-    }
-    console.log(msg);
-}
+
 
